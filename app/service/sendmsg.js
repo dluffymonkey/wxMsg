@@ -31,6 +31,8 @@ class sendmsg extends Service {
         'Content-Type': 'application/json',
       },
     });
+    console.log("2222")
+    console.log(result)
     return result;
   }
   // 获取token
@@ -42,6 +44,7 @@ class sendmsg extends Service {
       dataType: 'json',
     });
     if (result.status === 200) {
+      console.log("3333")
       return result.data.access_token;
     }
   }
@@ -53,7 +56,7 @@ class sendmsg extends Service {
     // 结婚纪念日模板 getMarryDay == 0  marry
     // 生日 模板 getbirthday == 0       birthday
     // 正常模板                         daily
-
+    console.log("4444")
     const wageDay = this.getWageDay();
     const marry = this.getMarryDay();
     const birthday = this.getbirthday();
@@ -112,22 +115,22 @@ class sendmsg extends Service {
           value: this.getDatetime(),
           color: '#cc33cc',
         },
-        love: {
-          value: this.getLoveDay(),
-          color: '#ff3399',
-        },
-        wage: {
-          value: wageDay,
-          color: '#66ff00',
-        },
-        birthday: {
-          value: birthday,
-          color: '#ff0033',
-        },
-        marry: {
-          value: marry,
-          color: '#ff0033',
-        },
+        // love: {
+        //   value: this.getLoveDay(),
+        //   color: '#ff3399',
+        // },
+        // wage: {
+        //   value: wageDay,
+        //   color: '#66ff00',
+        // },
+        // birthday: {
+        //   value: birthday,
+        //   color: '#ff0033',
+        // },
+        // marry: {
+        //   value: marry,
+        //   color: '#ff0033',
+        // },
         wea: {
           value: getWeather.wea,
           color: '#33ff33',
@@ -158,17 +161,24 @@ class sendmsg extends Service {
         },
       };
     }
+    console.log(data)
     return data;
   }
   // 获取天气
-  async getWeather(city = '深泽') {
+  async getWeather(city = '武汉市') {
     const { app } = this;
-    const url = 'https://www.tianqiapi.com/api?unescape=1&version=v6&appid=' + app.config.weather.appid + '&appsecret=' + app.config.weather.appsecret + '&city=' + city;
+    const url = 'http://api.tianapi.com/tianqi/index';
     const result = await this.ctx.curl(url, {
-      method: 'get',
+      method: 'POST',
+      data: {
+        key: app.config.weather.appid,
+        city: city
+      },
       dataType: 'json',
     });
     console.log(result.status);
+    console.log("天气结果：")
+    console.log(result.data);
     // "wea": "多云",
     // "tem": "27", 实时温度
     // "tem1": "27", 高温
